@@ -12,6 +12,8 @@ const playBtn = document.getElementById('play');
 const nextBtn = document.getElementById('next');
 let isPlaying = false;
 let songIndex = 0;
+let currentTime = 0;
+let duration = 0;
 
 const songs = [
   {
@@ -70,26 +72,27 @@ const nextSong = () => {
   playSong();
 };
 
-const updateProgressBar = e => {
-  const {duration, currentTime} = e.srcElement;
-  // Update progress bar width
-  const progressPercent = currentTime / duration * 100;
-  progress.style.width =`${progressPercent}%`;
-  // Calculate display for current
-  const currentMinutes = Math.floor(currentTime / 60);
-  const currentSeconds = (currentTime % 60) < 10 ? `0${Math.floor(currentTime % 60)}` : Math.floor(currentTime % 60);
-  currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
-};
-
-const calculateDurationDisplay = e => {
-  const {duration} = e.srcElement;
+const calculateDurationDisplay = () => {
+  duration = music.duration;
   const durationMinutes = Math.floor(duration / 60);
   const durationSeconds = (duration % 60) < 10 ? `0${Math.floor(duration % 60)}` : Math.floor(duration % 60);
   durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
 };
 
+const calculateCurrentDisplay = () => {
+  currentTime = music.currentTime;
+  const currentMinutes = Math.floor(currentTime / 60);
+  const currentSeconds = (currentTime % 60) < 10 ? `0${Math.floor(currentTime % 60)}` : Math.floor(currentTime % 60);
+  currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+};
+
+const updateProgressBar = () => {
+  const progressPercent = currentTime / duration * 100;
+  progress.style.width =`${progressPercent}%`;
+  console.log(progress.style.width);
+};
+
 const setCurrentTime = e => {
-  const {duration} = music;
   music.currentTime = e.offsetX / progressBarWidth * duration;
 };
 
@@ -102,5 +105,6 @@ prevBtn.addEventListener('click', prevSong);
 nextBtn.addEventListener('click', nextSong);
 music.addEventListener('ended', nextSong);
 music.addEventListener('loadedmetadata', calculateDurationDisplay);
+music.addEventListener('timeupdate', calculateCurrentDisplay);
 music.addEventListener('timeupdate', updateProgressBar);
 progressContainer.addEventListener('click', setCurrentTime);
