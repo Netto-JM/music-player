@@ -52,7 +52,6 @@ const pauseSong = () => {
   music.pause();
 };
 
-//Update DOM
 const loadSong = song => {
   image.src = `img/${song.name}.jpg`;
   title.textContent = song.displayName;
@@ -89,7 +88,6 @@ const calculateCurrentDisplay = () => {
 const updateProgressBar = () => {
   const progressPercent = currentTime / duration * 100;
   progress.style.width =`${progressPercent}%`;
-  console.log(progress.style.width);
 };
 
 const setCurrentTime = e => {
